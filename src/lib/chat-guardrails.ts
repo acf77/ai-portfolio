@@ -9,7 +9,7 @@ const INJECTION_PATTERNS = [
 ];
 
 const REFUSAL =
-  "I can only help with questions about Antonio's experience, projects, and research. Ask me something about his work or background.";
+  "I can only help with questions about Antonio's experience, projects, research, and writing. Ask me something about his work or background.";
 
 export function isBlockedMessage(message: string): boolean {
   return INJECTION_PATTERNS.some((pattern) => pattern.test(message));

@@ -1,19 +1,24 @@
 ---
-import { posts } from '../data/site';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts')).sort((a, b) =>
+  b.data.date.localeCompare(a.data.date),
+);
 ---
 
-<section data-screen-label="Writing">
+<section id="writing" data-screen-label="Writing">
   <h2>WRITING</h2>
   <div class="list">
     {
       posts.map((post) => (
-        <article class="card">
+        <a class="card" href={`/writing/${post.id}`}>
           <div class="card-head">
-            <h3>{post.title}</h3>
-            <span class="date">{post.date}</span>
+            <h3>{post.data.title}</h3>
+            <span class="date">{post.data.date}</span>
           </div>
-          <p>{post.excerpt}</p>
-        </article>
+          <p>{post.data.excerpt}</p>
+          <span class="read-link">[ read post → ]</span>
+        </a>
       ))
     }
   </div>
@@ -46,6 +51,14 @@ import { posts } from '../data/site';
     display: flex;
     flex-direction: column;
     gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+
+  .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--fg);
   }
 
   .card-head {
@@ -61,11 +74,13 @@ import { posts } from '../data/site';
     font-size: 12px;
     color: var(--fg);
     margin: 0;
+    text-align: left;
   }
 
   .date {
     font-size: 13px;
     color: var(--muted);
+    flex-shrink: 0;
   }
 
   p {
@@ -73,5 +88,12 @@ import { posts } from '../data/site';
     color: var(--muted);
     margin: 0;
     line-height: 1.5;
+    text-align: left;
+  }
+
+  .read-link {
+    font-size: 12px;
+    color: var(--fg);
+    margin-top: 4px;
   }
 </style>

@@ -67,7 +67,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const messages: ChatMessage[] = [
-    { role: 'system', content: buildSystemPrompt() },
+    { role: 'system', content: await buildSystemPrompt() },
     { role: 'user', content: wrapUserMessage(message) },
   ];
 

@@ -1,0 +1,173 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+
+  return Promise.all(
+    posts.map(async (post) => {
+      const { Content } = await render(post);
+      return {
+        params: { slug: post.id },
+        props: { post, Content },
+      };
+    }),
+  );
+}
+
+const { post, Content } = Astro.props;
+const sourceLabel = post.data.source === 'tabnews' ? 'TabNews' : 'LinkedIn';
+---
+
+<Layout title={`${post.data.title} — Antonio Carlos Filho`} description={post.data.excerpt}>
+  <article class="post">
+    <a class="back" href="/#writing">← back to writing</a>
+
+    <header>
+      <p class="meta">
+        <span>{post.data.date}</span>
+        <span class="sep">·</span>
+        <span>{sourceLabel}</span>
+      </p>
+      <h1>{post.data.title}</h1>
+    </header>
+
+    <div class="body">
+      <Content />
+    </div>
+
+    <footer class="original">
+      <p>
+        Originally published on
+        <a href={post.data.externalLink} target="_blank" rel="noopener noreferrer">{sourceLabel}</a>
+      </p>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  .post {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px 100px;
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 32px;
+  }
+
+  .back:hover {
+    opacity: 0.7;
+  }
+
+  header {
+    border-bottom: 3px solid var(--fg);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+
+  .meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+
+  .sep {
+    margin: 0 8px;
+  }
+
+  h1 {
+    font-size: clamp(16px, 2.4vw, 22px);
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0;
+    text-align: left;
+  }
+
+  .body :global(h2),
+  .body :global(h3) {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 32px 0 12px;
+    text-align: left;
+  }
+
+  .body :global(p) {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 16px;
+    text-align: left;
+  }
+
+  .body :global(ul),
+  .body :global(ol) {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 16px;
+    padding-left: 24px;
+    text-align: left;
+  }
+
+  .body :global(li) {
+    margin-bottom: 8px;
+  }
+
+  .body :global(blockquote) {
+    border-left: 3px solid var(--fg);
+    margin: 24px 0;
+    padding: 4px 0 4px 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .body :global(pre) {
+    border: 3px solid var(--fg);
+    background: var(--card);
+    padding: 16px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+  }
+
+  .body :global(code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .body :global(p code),
+  .body :global(li code) {
+    border: 1px solid var(--fg);
+    padding: 1px 5px;
+  }
+
+  .body :global(hr) {
+    border: none;
+    border-top: 3px solid var(--fg);
+    margin: 32px 0;
+  }
+
+  .body :global(a) {
+    color: var(--fg);
+  }
+
+  .original {
+    border-top: 3px solid var(--fg);
+    margin-top: 48px;
+    padding-top: 24px;
+  }
+
+  .original p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+</style>

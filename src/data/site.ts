@@ -13,12 +13,6 @@ export interface Paper {
   link: string;
 }
 
-export interface Post {
-  title: string;
-  date: string;
-  excerpt: string;
-}
-
 export const scholarUrl =
   'https://scholar.google.com/citations?user=wNAW_xIAAAAJ&hl=en&authuser=1';
 
@@ -129,23 +123,5 @@ export const papers: Paper[] = [
       'AC Silva-Filho, SR Dutra-Macedo, ASM Vieira, C Mostarda — arXiv preprint arXiv:2102.09410',
     year: '2021',
     link: 'https://arxiv.org/abs/2102.09410',
-  },
-];
-
-export const posts: Post[] = [
-  {
-    title: 'ON BUILDING SMALL THINGS',
-    date: '2026.06.02',
-    excerpt: 'Placeholder excerpt for a blog post. Replace with your real writing.',
-  },
-  {
-    title: 'NOTES ON LEARNING IN PUBLIC',
-    date: '2026.04.18',
-    excerpt: 'Placeholder excerpt for a blog post. Replace with your real writing.',
-  },
-  {
-    title: 'WHY PIXELS STILL MATTER',
-    date: '2026.02.09',
-    excerpt: 'Placeholder excerpt for a blog post. Replace with your real writing.',
   },
 ];
