@@ -149,7 +149,12 @@
     cursor: pointer;
   }
 
-  button:hover {
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  button:hover:not(:disabled) {
     opacity: 0.85;
   }
 
@@ -171,6 +176,54 @@
     text-align: left;
     font-size: 14px;
     color: var(--fg);
+    line-height: 1.55;
+  }
+
+  .response :global(p) {
+    margin: 0 0 0.75em;
+  }
+
+  .response :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .response :global(ul),
+  .response :global(ol) {
+    margin: 0 0 0.75em;
+    padding-left: 1.25em;
+  }
+
+  .response :global(li) {
+    margin-bottom: 0.35em;
+  }
+
+  .response :global(a) {
+    color: var(--fg);
+    text-decoration: underline;
+  }
+
+  .response :global(code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92em;
+    background: var(--stripe-b);
+    padding: 0.1em 0.35em;
+  }
+
+  .response :global(pre) {
+    margin: 0 0 0.75em;
+    padding: 10px;
+    overflow-x: auto;
+    border: 2px solid var(--fg);
+    background: var(--stripe-a);
+  }
+
+  .response :global(pre code) {
+    background: transparent;
+    padding: 0;
+  }
+
+  .response :global(strong) {
+    font-weight: 700;
   }
 
   .scroll-hint {
@@ -196,23 +249,56 @@
 </style>
 
 <script>
+  import DOMPurify from 'dompurify';
+  import { marked } from 'marked';
+
+  marked.setOptions({ breaks: true, gfm: true });
+
   const form = document.getElementById('ask-form') as HTMLFormElement;
   const input = document.getElementById('ask-input') as HTMLInputElement;
+  const submitButton = form.querySelector('button') as HTMLButtonElement;
   const thinking = document.getElementById('ask-thinking')!;
   const response = document.getElementById('ask-response')!;
 
-  form.addEventListener('submit', (e) => {
+  function setPlainText(text: string) {
+    response.textContent = text;
+  }
+
+  function setMarkdown(text: string) {
+    const html = marked.parse(text) as string;
+    response.innerHTML = DOMPurify.sanitize(html);
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!input.value.trim()) return;
+    const message = input.value.trim();
+    if (!message) return;
 
     thinking.hidden = false;
     response.hidden = true;
+    submitButton.disabled = true;
 
-    setTimeout(() => {
-      thinking.hidden = true;
-      response.textContent =
-        "This demo isn't wired up to a real AI yet — but soon you'll be able to ask anything about my work here.";
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = (await res.json()) as { reply?: string; error?: string };
+
+      if (!res.ok) {
+        setPlainText(data.error ?? 'Something went wrong. Please try again.');
+      } else {
+        setMarkdown(data.reply ?? 'No response received.');
+      }
       response.hidden = false;
-    }, 900);
+    } catch {
+      setPlainText('Could not reach the chat service. Check your connection and try again.');
+      response.hidden = false;
+    } finally {
+      thinking.hidden = true;
+      submitButton.disabled = false;
+    }
   });
 </script>
