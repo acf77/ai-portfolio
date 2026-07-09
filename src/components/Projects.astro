@@ -7,9 +7,9 @@ import { projects } from '../data/site';
   <div class="grid">
     {
       projects.map((p) => (
-        <article class="card">
+        <a class="card" href={p.href} target="_blank" rel="noopener noreferrer">
           <div class="thumb">
-            <span>SCREENSHOT</span>
+            <img src={p.image} alt={`${p.title} screenshot`} loading="lazy" />
           </div>
           <div class="body">
             <h3>{p.title}</h3>
@@ -20,7 +20,7 @@ import { projects } from '../data/site';
               ))}
             </div>
           </div>
-        </article>
+        </a>
       ))
     }
   </div>
@@ -51,28 +51,29 @@ import { projects } from '../data/site';
     background: var(--card);
     display: flex;
     flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+
+  .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--fg);
   }
 
   .thumb {
     height: 150px;
-    background: repeating-linear-gradient(
-      45deg,
-      var(--stripe-a) 0px,
-      var(--stripe-a) 8px,
-      var(--stripe-b) 8px,
-      var(--stripe-b) 16px
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
     border-bottom: 3px solid var(--fg);
+    background: var(--stripe-a);
   }
 
-  .thumb span {
-    font-size: 12px;
-    color: var(--fg);
-    background: var(--bg);
-    padding: 4px 10px;
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
   }
 
   .body {
@@ -80,6 +81,7 @@ import { projects } from '../data/site';
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex: 1;
   }
 
   h3 {
@@ -100,7 +102,8 @@ import { projects } from '../data/site';
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 4px;
+    margin-top: auto;
+    padding-top: 4px;
   }
 
   .tag {

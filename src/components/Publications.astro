@@ -1,11 +1,11 @@
 ---
-import { papers } from '../data/site';
+import { papers, scholarUrl } from '../data/site';
 ---
 
 <section data-screen-label="Publications">
   <div class="head">
     <h2>PUBLICATIONS</h2>
-    <a href="#">[ view on google scholar → ]</a>
+    <a href={scholarUrl} target="_blank" rel="noopener noreferrer">[ view on google scholar → ]</a>
   </div>
   <div class="list">
     {
@@ -16,7 +16,7 @@ import { papers } from '../data/site';
             <span class="year">{paper.year}</span>
           </div>
           <p>{paper.venue}</p>
-          <a class="paper-link" href={paper.link}>[ read paper → ]</a>
+          <a class="paper-link" href={paper.link} target="_blank" rel="noopener noreferrer">[ read paper → ]</a>
         </article>
       ))
     }

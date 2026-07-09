@@ -1,5 +1,22 @@
 <section class="hero" data-screen-label="Hero">
-  <h1>ANTONIO CARLOS FILHO</h1>
+  <h1 class="name-banner">
+    <img
+      class="banner banner-large"
+      src="/images/name-banner-large.png"
+      alt="Antonio Carlos Filho"
+      width="1440"
+      height="140"
+      decoding="async"
+    />
+    <img
+      class="banner banner-small"
+      src="/images/name-banner-small.png"
+      alt="Antonio Carlos Filho"
+      width="1028"
+      height="378"
+      decoding="async"
+    />
+  </h1>
   <p class="tagline">&gt; Frontend, AI and Science_<span class="cursor">▌</span></p>
 
   <form id="ask-form">
@@ -41,12 +58,41 @@
     gap: 16px;
   }
 
-  h1 {
-    font-weight: 700;
-    font-size: clamp(20px, 3.6vw, 34px);
-    color: var(--fg);
+  h1.name-banner {
     margin: 0;
-    line-height: 1.5;
+    line-height: 0;
+  }
+
+  .banner {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  :global(:root[data-theme='light']) .banner {
+    filter: invert(1);
+  }
+
+  .banner-large {
+    width: min(900px, 92vw);
+  }
+
+  .banner-small {
+    display: none;
+    width: min(180px, 52vw);
+    margin-inline: auto;
+  }
+
+  @media (max-width: 767px) {
+    .banner-large {
+      display: none;
+    }
+
+    .banner-small {
+      display: block;
+    }
   }
 
   .tagline {
