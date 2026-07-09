@@ -4,14 +4,23 @@ import { buildSystemPrompt } from '../../lib/chat-context';
 
 export const prerender = false;
 
-const gatewayUrl = (import.meta.env.AI_GATEWAY_URL ?? 'https://ai.trapiche.cloud').replace(
-  /\/$/,
-  '',
-);
-const gatewayKey = import.meta.env.AI_GATEWAY_API_KEY;
-const gatewayModel = import.meta.env.AI_GATEWAY_MODEL ?? 'qwen-3.7-max';
-
 type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string };
+
+type GatewayConfig = {
+  url: string;
+  key: string;
+  model: string;
+};
+
+function getGatewayConfig(): GatewayConfig | null {
+  const key = process.env.AI_GATEWAY_API_KEY?.trim();
+  if (!key) return null;
+
+  const url = (process.env.AI_GATEWAY_URL ?? 'https://ai.trapiche.cloud').replace(/\/$/, '');
+  const model = process.env.AI_GATEWAY_MODEL ?? 'qwen-3.7-max';
+
+  return { url, key, model };
+}
 
 type GatewayError = {
   error?: {
@@ -39,7 +48,8 @@ function userFacingError(status: number, message?: string, code?: string): strin
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  if (!gatewayKey) {
+  const gateway = getGatewayConfig();
+  if (!gateway) {
     return Response.json(
       { error: 'Chat is not configured. Set AI_GATEWAY_API_KEY in the environment.' },
       { status: 503 },
@@ -73,14 +83,14 @@ export const POST: APIRoute = async ({ request }) => {
 
   let gatewayResponse: Response;
   try {
-    gatewayResponse = await fetch(`${gatewayUrl}/v1/chat/completions`, {
+    gatewayResponse = await fetch(`${gateway.url}/v1/chat/completions`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${gatewayKey}`,
+        Authorization: `Bearer ${gateway.key}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: gatewayModel,
+        model: gateway.model,
         messages,
         temperature: 0.2,
         max_tokens: 400,
