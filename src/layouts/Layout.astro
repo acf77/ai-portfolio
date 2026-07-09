@@ -1,0 +1,114 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Antonio Carlos Filho — Frontend, AI and Science',
+  description = 'Portfolio of Antonio Carlos Filho — Frontend, AI and Science.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // Apply the saved theme before first paint to avoid a flash.
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.dataset.theme = saved;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <button id="theme-toggle" type="button" aria-live="polite">LIGHT MODE</button>
+
+    <slot />
+
+    <footer>
+      <span>© 2026 ANTONIO CARLOS FILHO — built pixel by pixel</span>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.035) 0px,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    animation: scan 1s steps(2) infinite;
+  }
+
+  #theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 40;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 9px;
+    background: var(--fg);
+    color: var(--bg);
+    border: none;
+    padding: 9px 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+
+  #theme-toggle:hover {
+    opacity: 0.8;
+  }
+
+  footer {
+    border-top: 3px solid var(--fg);
+    padding: 24px;
+    text-align: center;
+  }
+
+  footer span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('theme-toggle')!;
+  const root = document.documentElement;
+
+  const syncLabel = () => {
+    toggle.textContent = root.dataset.theme === 'dark' ? 'LIGHT MODE' : 'DARK MODE';
+  };
+
+  toggle.addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('theme', next);
+    syncLabel();
+  });
+
+  syncLabel();
+</script>

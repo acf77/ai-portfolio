@@ -1,0 +1,101 @@
+---
+import { papers } from '../data/site';
+---
+
+<section data-screen-label="Publications">
+  <div class="head">
+    <h2>PUBLICATIONS</h2>
+    <a href="#">[ view on google scholar → ]</a>
+  </div>
+  <div class="list">
+    {
+      papers.map((paper) => (
+        <article class="card">
+          <div class="card-head">
+            <h3>{paper.title}</h3>
+            <span class="year">{paper.year}</span>
+          </div>
+          <p>{paper.venue}</p>
+          <a class="paper-link" href={paper.link}>[ read paper → ]</a>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 20px;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-weight: 700;
+    font-size: clamp(14px, 1.6vw, 18px);
+    color: var(--fg);
+    margin: 0;
+  }
+
+  .head a {
+    font-size: 12px;
+    color: var(--fg);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .card {
+    border: 3px solid var(--fg);
+    background: var(--card);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--fg);
+    margin: 0;
+  }
+
+  .year {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .paper-link {
+    font-size: 12px;
+    color: var(--fg);
+    margin-top: 4px;
+  }
+</style>

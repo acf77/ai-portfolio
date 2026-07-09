@@ -1,0 +1,172 @@
+<section class="hero" data-screen-label="Hero">
+  <h1>ANTONIO CARLOS FILHO</h1>
+  <p class="tagline">&gt; Frontend, AI and Science_<span class="cursor">▌</span></p>
+
+  <form id="ask-form">
+    <div class="ask-box">
+      <span class="prompt-char">&gt;</span>
+      <input
+        id="ask-input"
+        type="text"
+        placeholder="ask anything about me or my projects..."
+        autocomplete="off"
+        aria-label="Ask anything about me or my projects"
+      />
+      <button type="submit">SEND</button>
+    </div>
+
+    <p id="ask-thinking" class="thinking" hidden>
+      thinking<span class="dots">...</span>
+    </p>
+
+    <div id="ask-response" class="response" role="status" hidden></div>
+  </form>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <span class="scroll-label">SCROLL</span>
+    <span class="scroll-arrow">▼</span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    text-align: center;
+    gap: 16px;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: clamp(20px, 3.6vw, 34px);
+    color: var(--fg);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .tagline {
+    font-size: clamp(14px, 1.8vw, 18px);
+    color: var(--muted);
+    margin: 0;
+    letter-spacing: 1px;
+  }
+
+  .cursor {
+    animation: blink 1s step-start infinite;
+  }
+
+  form {
+    margin-top: 16px;
+    width: min(560px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ask-box {
+    display: flex;
+    border: 3px solid var(--fg);
+    background: var(--card);
+  }
+
+  .prompt-char {
+    font-size: 16px;
+    color: var(--muted);
+    padding: 12px 0 12px 14px;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    padding: 12px 10px;
+  }
+
+  button {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 10px;
+    background: var(--fg);
+    color: var(--bg);
+    border: none;
+    padding: 0 18px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.85;
+  }
+
+  .thinking {
+    font-size: 14px;
+    color: var(--muted);
+    text-align: left;
+    margin: 0;
+  }
+
+  .dots {
+    animation: blink 0.6s step-start infinite;
+  }
+
+  .response {
+    border: 3px solid var(--fg);
+    background: var(--card);
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--fg);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: bounce 1.6s ease-in-out infinite;
+  }
+
+  .scroll-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  .scroll-arrow {
+    color: var(--fg);
+    font-size: 14px;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('ask-form') as HTMLFormElement;
+  const input = document.getElementById('ask-input') as HTMLInputElement;
+  const thinking = document.getElementById('ask-thinking')!;
+  const response = document.getElementById('ask-response')!;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!input.value.trim()) return;
+
+    thinking.hidden = false;
+    response.hidden = true;
+
+    setTimeout(() => {
+      thinking.hidden = true;
+      response.textContent =
+        "This demo isn't wired up to a real AI yet — but soon you'll be able to ask anything about my work here.";
+      response.hidden = false;
+    }, 900);
+  });
+</script>
