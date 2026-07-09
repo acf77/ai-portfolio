@@ -165,10 +165,13 @@
     opacity: 0.85;
   }
 
-  .thinking {
+  .thinking:not([hidden]) {
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  .thinking {
     font-size: 14px;
     color: var(--muted);
     text-align: left;
@@ -351,6 +354,8 @@
 
       const data = (await res.json()) as { reply?: string; error?: string };
 
+      thinking.hidden = true;
+
       if (!res.ok) {
         setPlainText(data.error ?? 'Something went wrong. Please try again.');
       } else {
@@ -358,6 +363,7 @@
       }
       response.hidden = false;
     } catch {
+      thinking.hidden = true;
       setPlainText('Could not reach the chat service. Check your connection and try again.');
       response.hidden = false;
     } finally {
