@@ -32,8 +32,10 @@
       <button type="submit">SEND</button>
     </div>
 
-    <p id="ask-thinking" class="thinking" hidden>
-      thinking<span class="dots">...</span>
+    <p id="ask-thinking" class="thinking" hidden aria-live="polite">
+      <span class="thinking-prompt">&gt;</span>
+      <span class="square-spinner" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="thinking-text">processing</span><span class="thinking-cursor">▌</span>
     </p>
 
     <div id="ask-response" class="response" role="status" hidden></div>
@@ -138,6 +140,11 @@
     padding: 12px 10px;
   }
 
+  input:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
   button {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
@@ -159,14 +166,69 @@
   }
 
   .thinking {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 14px;
     color: var(--muted);
     text-align: left;
     margin: 0;
   }
 
-  .dots {
-    animation: blink 0.6s step-start infinite;
+  .thinking-prompt {
+    color: var(--fg);
+    flex-shrink: 0;
+  }
+
+  .square-spinner {
+    display: inline-flex;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .square-spinner i {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--fg);
+    box-sizing: border-box;
+    animation: sq-blink 1s ease infinite;
+  }
+
+  .square-spinner i:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .square-spinner i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .square-spinner i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .square-spinner i:nth-child(4) {
+    animation-delay: 0.45s;
+  }
+
+  @keyframes sq-blink {
+    0%,
+    40%,
+    100% {
+      background: transparent;
+    }
+
+    20% {
+      background: var(--fg);
+    }
+  }
+
+  .thinking-text {
+    letter-spacing: 0.5px;
+  }
+
+  .thinking-cursor {
+    animation: blink 1s step-start infinite;
   }
 
   .response {
@@ -272,11 +334,13 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const message = input.value.trim();
-    if (!message) return;
+    if (!message || input.disabled) return;
 
     thinking.hidden = false;
     response.hidden = true;
+    input.disabled = true;
     submitButton.disabled = true;
+    form.setAttribute('aria-busy', 'true');
 
     try {
       const res = await fetch('/api/chat', {
@@ -298,7 +362,10 @@
       response.hidden = false;
     } finally {
       thinking.hidden = true;
+      input.disabled = false;
       submitButton.disabled = false;
+      form.removeAttribute('aria-busy');
+      input.focus();
     }
   });
 </script>
