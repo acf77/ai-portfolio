@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" fill="none">
+  <rect width="720" height="200" fill="#0a0a0a"/>
+  <rect x="16" y="60" width="140" height="80" stroke="#e8e8e8" stroke-width="3" fill="#141414"/>
+  <text x="86" y="95" text-anchor="middle" fill="#e8e8e8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">PARAGRAPH</text>
+  <text x="86" y="115" text-anchor="middle" fill="#888" font-family="JetBrains Mono, monospace" font-size="9">scan (3s debounce)</text>
+  <path d="M156 100 H184" stroke="#e8e8e8" stroke-width="3"/>
+  <polygon points="184,100 176,96 176,104" fill="#e8e8e8"/>
+  <rect x="188" y="60" width="140" height="80" stroke="#e8e8e8" stroke-width="3" fill="#141414"/>
+  <text x="258" y="95" text-anchor="middle" fill="#e8e8e8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">LLM FINDINGS</text>
+  <text x="258" y="115" text-anchor="middle" fill="#888" font-family="JetBrains Mono, monospace" font-size="9">claim + searchQuery</text>
+  <path d="M328 100 H356" stroke="#e8e8e8" stroke-width="3"/>
+  <polygon points="356,100 348,96 348,104" fill="#e8e8e8"/>
+  <rect x="360" y="60" width="140" height="80" stroke="#e8e8e8" stroke-width="3" fill="#141414"/>
+  <text x="430" y="90" text-anchor="middle" fill="#e8e8e8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">PUBMED</text>
+  <text x="430" y="108" text-anchor="middle" fill="#888" font-family="JetBrains Mono, monospace" font-size="9">E-utilities</text>
+  <text x="430" y="124" text-anchor="middle" fill="#888" font-family="JetBrains Mono, monospace" font-size="9">’ Crossref fallback</text>
+  <path d="M500 100 H528" stroke="#e8e8e8" stroke-width="3"/>
+  <polygon points="528,100 520,96 520,104" fill="#e8e8e8"/>
+  <rect x="532" y="60" width="140" height="80" stroke="#e8e8e8" stroke-width="3" fill="#141414"/>
+  <text x="602" y="95" text-anchor="middle" fill="#e8e8e8" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">APA FORMAT</text>
+  <text x="602" y="115" text-anchor="middle" fill="#888" font-family="JetBrains Mono, monospace" font-size="9">in-text + reference</text>
+  <path d="M672 100 H688" stroke="#e8e8e8" stroke-width="3"/>
+  <polygon points="688,100 680,96 680,104" fill="#e8e8e8"/>
+  <rect x="692" y="72" width="12" height="56" stroke="#e8e8e8" stroke-width="3" fill="#141414"/>
+  <text x="28" y="28" fill="#888" font-family="JetBrains Mono, monospace" font-size="10">CITATIONS FLOW</text>
+  <text x="698" y="108" fill="#e8e8e8" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700" transform="rotate(90 698 108)">INSERT</text>
+</svg>

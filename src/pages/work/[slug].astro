@@ -1,0 +1,225 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const entries = await getCollection('work');
+
+  return Promise.all(
+    entries.map(async (entry) => {
+      const { Content } = await render(entry);
+      return {
+        params: { slug: entry.id },
+        props: { entry, Content },
+      };
+    }),
+  );
+}
+
+const { entry, Content } = Astro.props;
+const { liveUrl, repoUrl, video, role, tags } = entry.data;
+---
+
+<Layout title={`${entry.data.title} — Antonio Carlos Filho`} description={entry.data.excerpt}>
+  <article class="case-study">
+    <a class="back" href="/#projects">← back to projects</a>
+
+    <header>
+      <p class="meta">
+        <span>{entry.data.date}</span>
+        <span class="sep">·</span>
+        <span>{role}</span>
+      </p>
+      <h1>{entry.data.title}</h1>
+      <p class="lede">{entry.data.excerpt}</p>
+      <div class="tags">
+        {tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+      {
+        (liveUrl || repoUrl) && (
+          <div class="links">
+            {liveUrl && (
+              <a href={liveUrl} target="_blank" rel="noopener noreferrer">
+                [ live product → ]
+              </a>
+            )}
+            {repoUrl && (
+              <a href={repoUrl} target="_blank" rel="noopener noreferrer">
+                [ source code → ]
+              </a>
+            )}
+          </div>
+        )
+      }
+    </header>
+
+    {
+      video && (
+        <figure class="media">
+          <video controls playsinline preload="metadata">
+            <source src={video} type={video.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+          </video>
+          <figcaption>Product demo — recorded from the live build.</figcaption>
+        </figure>
+      )
+    }
+
+    <div class="body">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .case-study {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px 100px;
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 32px;
+  }
+
+  .back:hover {
+    opacity: 0.7;
+  }
+
+  header {
+    border-bottom: 3px solid var(--fg);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+
+  .meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+
+  .sep {
+    margin: 0 8px;
+  }
+
+  h1 {
+    font-size: clamp(16px, 2.4vw, 22px);
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0 0 12px;
+    text-align: left;
+  }
+
+  .lede {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 16px;
+    text-align: left;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .tag {
+    font-size: 11px;
+    border: 2px solid var(--fg);
+    padding: 2px 8px;
+    color: var(--fg);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .links a {
+    color: var(--fg);
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    opacity: 0.7;
+  }
+
+  .media {
+    margin: 0 0 32px;
+    border: 3px solid var(--fg);
+    background: var(--card);
+  }
+
+  .media video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .media figcaption {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 10px 14px;
+    border-top: 3px solid var(--fg);
+    margin: 0;
+    text-align: left;
+  }
+
+  .body :global(h2) {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 32px 0 12px;
+    text-align: left;
+  }
+
+  .body :global(p) {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 16px;
+    text-align: left;
+  }
+
+  .body :global(ol),
+  .body :global(ul) {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 16px;
+    padding-left: 24px;
+    text-align: left;
+  }
+
+  .body :global(li) {
+    margin-bottom: 8px;
+  }
+
+  .body :global(a) {
+    color: var(--fg);
+  }
+
+  .body :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 3px solid var(--fg);
+    margin: 16px 0;
+  }
+
+  .body :global(strong) {
+    color: var(--fg);
+    font-weight: 700;
+  }
+</style>

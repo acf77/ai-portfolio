@@ -7,6 +7,10 @@ export async function buildSystemPrompt(): Promise<string> {
     b.data.date.localeCompare(a.data.date),
   );
 
+  const workEntries = (await getCollection('work')).sort((a, b) =>
+    b.data.date.localeCompare(a.data.date),
+  );
+
   const writingLines = postEntries
     .map((post) => {
       const header = [
@@ -21,6 +25,25 @@ export async function buildSystemPrompt(): Promise<string> {
       return `${header}\n\n${post.body ?? ''}`;
     })
     .join('\n\n---\n\n');
+
+  const workLines = workEntries
+    .map((entry) => {
+      const header = [
+        `### ${entry.data.title}`,
+        `Date: ${entry.data.date}`,
+        `Role: ${entry.data.role}`,
+        `Portfolio: /work/${entry.id}`,
+        `Summary: ${entry.data.excerpt}`,
+        entry.data.liveUrl ? `Live: ${entry.data.liveUrl}` : '',
+        entry.data.repoUrl ? `Repo: ${entry.data.repoUrl}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n');
+
+      return `${header}\n\n${entry.body ?? ''}`;
+    })
+    .join('\n\n---\n\n');
+
   const projectLines = projects
     .map((p) => `- ${p.title}: ${p.desc} (${p.tags.join(', ')}) — ${p.href}`)
     .join('\n');
@@ -84,6 +107,9 @@ ${paperLines}
 
 Writing (full articles authored by Antonio — also on this portfolio at /writing/...):
 ${writingLines}
+
+Case studies (project deep-dives at /work/...):
+${workLines}
 
 ## Scope (strict)
 You ONLY answer questions about Antonio Carlos Filho / Antonio Carlos Silva-Filho: his work experience, education, skills, projects, research, publications, writing, and public links above.

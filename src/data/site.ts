@@ -3,6 +3,7 @@ export interface Project {
   desc: string;
   tags: string[];
   href: string;
+  liveUrl?: string;
   images: string[];
 }
 
@@ -18,22 +19,18 @@ export const scholarUrl =
 
 export const projects: Project[] = [
   {
-    title: 'TRAPICHE',
-    desc: 'Brazilian cloud for developers. Auto-deploy on every push, servers in São Paulo, pay in BRL with Pix — no IOF, no international card.',
-    tags: ['CLOUD', 'DEPLOY', 'NEXT.JS', 'ASTRO', 'GO', 'GIN', 'LIBSQL', 'REACT', 'FASTIFY'],
-    href: 'https://trapiche.cloud',
-    images: [
-      '/projects/trapiche-dashboard.png',
-      '/projects/trapiche-deploy.png',
-      '/projects/trapiche-ai-gateway.png',
-      '/projects/trapiche-deploy-portfolio.png',
-    ],
+    title: 'HRV LAB',
+    desc: 'Interactive 24h Holter explorer — scrub the tachogram, watch the Poincaré ellipse reshape, see SD1/SD2 update live. Built from PhD research on heart rate variability.',
+    tags: ['REACT', 'D3', 'HRV', 'TYPESCRIPT', 'SCIENCE'],
+    href: 'https://hrv-lab-cool-fox.trapiche.site/',
+    images: ['/projects/hrv-lab-calm.png', '/projects/hrv-lab-active.png'],
   },
   {
     title: 'WISIO',
-    desc: 'AI writing platform for researchers drafting scientific manuscripts in English. Source-grounded feedback, PubMed and Crossref citations in one editor.',
-    tags: ['AI', 'WRITING', 'NEXT.JS', 'ASTRO', 'REACT', 'GO', 'TIPTAP', 'MONGODB', 'OPENAI'],
-    href: 'https://wisio.app',
+    desc: 'AI writing platform for researchers — rich-text editor with streaming, source-grounded feedback and one-click PubMed/Crossref citations.',
+    tags: ['REACT', 'NEXT.JS', 'TIPTAP', 'AI STREAMING', 'OPENAI'],
+    href: '/work/wisio',
+    liveUrl: 'https://wisio.app',
     images: [
       '/projects/wisio-landing.png',
       '/projects/wisio-editor-precision.png',
@@ -41,11 +38,16 @@ export const projects: Project[] = [
     ],
   },
   {
-    title: 'LUUP',
-    desc: 'Spec-driven development CLI that interviews you into a full spec, then drives coding agents through build and acceptance.',
-    tags: ['CLI', 'AI AGENTS', 'BUN', 'TYPESCRIPT', 'SOLIDJS', 'DRIZZLE', 'AI SDK', 'MCP', 'ZOD'],
-    href: 'https://luup.dev',
-    images: ['/projects/luup.png'],
+    title: 'TRAPICHE',
+    desc: 'Brazilian cloud for developers. Auto-deploy on every push, servers in São Paulo, pay in BRL with Pix — no IOF, no international card.',
+    tags: ['NEXT.JS', 'REACT', 'ASTRO', 'DESIGN SYSTEM', 'GO'],
+    href: 'https://trapiche.cloud',
+    images: [
+      '/projects/trapiche-dashboard.png',
+      '/projects/trapiche-deploy.png',
+      '/projects/trapiche-ai-gateway.png',
+      '/projects/trapiche-deploy-portfolio.png',
+    ],
   },
   {
     title: 'SAAS MAP',
@@ -63,8 +65,16 @@ export const projects: Project[] = [
     title: 'PROVADOR VIRTUAL',
     desc: 'AI virtual try-on MVP — upload your photo and a garment to preview how the outfit looks on you, powered by IDM-VTON.',
     tags: ['AI', 'FASHION', 'NEXT.JS', 'REACT', 'TAILWIND', 'REPLICATE', 'TYPESCRIPT'],
-    href: 'https://github.com/acf77/provador-virtual',
+    href: '/work/provador-virtual',
+    liveUrl: 'https://github.com/acf77/provador-virtual',
     images: ['/projects/provador-virtual.png'],
+  },
+  {
+    title: 'LUUP',
+    desc: 'Spec-driven development CLI that interviews you into a full spec, then drives coding agents through build and acceptance.',
+    tags: ['CLI', 'AI AGENTS', 'BUN', 'TYPESCRIPT', 'SOLIDJS', 'DRIZZLE', 'AI SDK', 'MCP', 'ZOD'],
+    href: 'https://luup.dev',
+    images: ['/projects/luup.png'],
   },
   {
     title: 'ELEVAR SALUD',

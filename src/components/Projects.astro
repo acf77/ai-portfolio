@@ -21,16 +21,29 @@ import { projects } from '../data/site';
             )}
             <span class="zoom-hint">[ zoom ]</span>
           </button>
-          <a class="body" href={p.href} target="_blank" rel="noopener noreferrer">
-            <h3>{p.title}</h3>
-            <p>{p.desc}</p>
-            <div class="tags">
-              {p.tags.map((tag) => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
-            <span class="visit-link">[ visit → ]</span>
-          </a>
+          <div class="body">
+            <a
+              class="body-link"
+              href={p.href}
+              {...(p.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+              <div class="tags">
+                {p.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+              <span class="visit-link">
+                {p.href.startsWith('/work/') ? '[ case study → ]' : '[ visit → ]'}
+              </span>
+            </a>
+            {p.liveUrl && (
+              <a class="live-link" href={p.liveUrl} target="_blank" rel="noopener noreferrer">
+                [ live → ]
+              </a>
+            )}
+          </div>
         </article>
       ))
     }
@@ -152,12 +165,19 @@ import { projects } from '../data/site';
     flex-direction: column;
     gap: 10px;
     flex: 1;
+  }
+
+  .body-link {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
     text-decoration: none;
     color: inherit;
     transition: transform 0.15s ease;
   }
 
-  .body:hover {
+  .body-link:hover {
     transform: translate(-2px, -2px);
     box-shadow: 4px 4px 0 var(--fg);
   }
@@ -192,10 +212,19 @@ import { projects } from '../data/site';
     color: var(--fg);
   }
 
-  .visit-link {
+  .visit-link,
+  .live-link {
     font-size: 12px;
     color: var(--fg);
+    text-decoration: none;
+  }
+
+  .visit-link {
     margin-top: 4px;
+  }
+
+  .live-link:hover {
+    opacity: 0.7;
   }
 
   .lightbox {
