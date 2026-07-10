@@ -3,7 +3,7 @@ export interface Project {
   desc: string;
   tags: string[];
   href: string;
-  image: string;
+  images: string[];
 }
 
 export interface Paper {
@@ -22,35 +22,56 @@ export const projects: Project[] = [
     desc: 'Brazilian cloud for developers. Auto-deploy on every push, servers in São Paulo, pay in BRL with Pix — no IOF, no international card.',
     tags: ['CLOUD', 'DEPLOY', 'NEXT.JS', 'ASTRO', 'GO', 'GIN', 'LIBSQL', 'REACT', 'FASTIFY'],
     href: 'https://trapiche.cloud',
-    image: '/projects/trapiche.png',
+    images: [
+      '/projects/trapiche-dashboard.png',
+      '/projects/trapiche-deploy.png',
+      '/projects/trapiche-ai-gateway.png',
+      '/projects/trapiche-deploy-portfolio.png',
+    ],
   },
   {
     title: 'WISIO',
     desc: 'AI writing platform for researchers drafting scientific manuscripts in English. Source-grounded feedback, PubMed and Crossref citations in one editor.',
     tags: ['AI', 'WRITING', 'NEXT.JS', 'ASTRO', 'REACT', 'GO', 'TIPTAP', 'MONGODB', 'OPENAI'],
     href: 'https://wisio.app',
-    image: '/projects/wisio.png',
+    images: [
+      '/projects/wisio-landing.png',
+      '/projects/wisio-editor-precision.png',
+      '/projects/wisio-editor-feedback.png',
+    ],
   },
   {
     title: 'LUUP',
     desc: 'Spec-driven development CLI that interviews you into a full spec, then drives coding agents through build and acceptance.',
     tags: ['CLI', 'AI AGENTS', 'BUN', 'TYPESCRIPT', 'SOLIDJS', 'DRIZZLE', 'AI SDK', 'MCP', 'ZOD'],
     href: 'https://luup.dev',
-    image: '/projects/luup.png',
+    images: ['/projects/luup.png'],
   },
   {
     title: 'SAAS MAP',
     desc: 'Interactive map of Brazilian SaaS by state and city. Explore startups by region, zoom into cities, and add your own product to the map.',
     tags: ['MAP', 'NEXT.JS', 'REACT', 'D3', 'LIBSQL', 'TAILWIND', 'TYPESCRIPT'],
     href: 'https://saas-map.trapiche.cloud',
-    image: '/projects/dev-map.png',
+    images: [
+      '/projects/dev-map.png',
+      '/projects/saas-map-overview.png',
+      '/projects/saas-map-add-app.png',
+      '/projects/saas-map-state-detail.png',
+    ],
   },
   {
     title: 'PROVADOR VIRTUAL',
     desc: 'AI virtual try-on MVP — upload your photo and a garment to preview how the outfit looks on you, powered by IDM-VTON.',
     tags: ['AI', 'FASHION', 'NEXT.JS', 'REACT', 'TAILWIND', 'REPLICATE', 'TYPESCRIPT'],
     href: 'https://github.com/acf77/provador-virtual',
-    image: '/projects/provador-virtual.png',
+    images: ['/projects/provador-virtual.png'],
+  },
+  {
+    title: 'ELEVAR SALUD',
+    desc: 'Telehealth platform for virtual consultations between patients and licensed doctors in Mexico. Built the patient/doctor UI, component library, and full frontend-backend integration.',
+    tags: ['HEALTHCARE', 'REACT', 'NEXT.JS', 'PWA', 'DESIGN SYSTEM', 'TYPESCRIPT'],
+    href: 'https://www.linkedin.com/company/elevarsalud',
+    images: ['/projects/elevar-salud.png', '/projects/elevar-salud-mobile-en.png'],
   },
 ];
 

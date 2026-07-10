@@ -7,11 +7,21 @@ import { projects } from '../data/site';
   <div class="grid">
     {
       projects.map((p) => (
-        <a class="card" href={p.href} target="_blank" rel="noopener noreferrer">
-          <div class="thumb">
-            <img src={p.image} alt={`${p.title} screenshot`} loading="lazy" />
-          </div>
-          <div class="body">
+        <article class="card">
+          <button
+            type="button"
+            class="thumb"
+            data-lightbox-title={p.title}
+            data-lightbox-images={JSON.stringify(p.images)}
+            aria-label={`View ${p.title} screenshots`}
+          >
+            <img src={p.images[0]} alt={`${p.title} screenshot`} loading="lazy" />
+            {p.images.length > 1 && (
+              <span class="shot-count">+{p.images.length - 1}</span>
+            )}
+            <span class="zoom-hint">[ zoom ]</span>
+          </button>
+          <a class="body" href={p.href} target="_blank" rel="noopener noreferrer">
             <h3>{p.title}</h3>
             <p>{p.desc}</p>
             <div class="tags">
@@ -19,12 +29,37 @@ import { projects } from '../data/site';
                 <span class="tag">{tag}</span>
               ))}
             </div>
-          </div>
-        </a>
+            <span class="visit-link">[ visit → ]</span>
+          </a>
+        </article>
       ))
     }
   </div>
 </section>
+
+<div id="project-lightbox" class="lightbox" hidden>
+  <button type="button" class="lightbox-backdrop" aria-label="Close screenshot"></button>
+  <figure class="lightbox-panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+    <div class="lightbox-head">
+      <div class="lightbox-meta">
+        <p id="lightbox-title" class="lightbox-title"></p>
+        <p id="lightbox-counter" class="lightbox-counter" hidden></p>
+      </div>
+      <div class="lightbox-actions">
+        <button type="button" id="lightbox-prev" class="lightbox-nav" hidden aria-label="Previous screenshot">
+          ← PREV
+        </button>
+        <button type="button" id="lightbox-next" class="lightbox-nav" hidden aria-label="Next screenshot">
+          NEXT →
+        </button>
+        <button type="button" class="lightbox-close" aria-label="Close">ESC ✕</button>
+      </div>
+    </div>
+    <div class="lightbox-frame">
+      <img id="lightbox-image" src="" alt="" />
+    </div>
+  </figure>
+</div>
 
 <style>
   section {
@@ -51,21 +86,26 @@ import { projects } from '../data/site';
     background: var(--card);
     display: flex;
     flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.15s ease;
-  }
-
-  .card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 var(--fg);
   }
 
   .thumb {
+    position: relative;
     height: 150px;
     overflow: hidden;
+    border: none;
     border-bottom: 3px solid var(--fg);
     background: var(--stripe-a);
+    padding: 0;
+    cursor: zoom-in;
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    transition: transform 0.15s ease;
+  }
+
+  .thumb:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--fg);
   }
 
   .thumb img {
@@ -74,6 +114,36 @@ import { projects } from '../data/site';
     object-fit: cover;
     object-position: top center;
     display: block;
+    pointer-events: none;
+  }
+
+  .shot-count {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--fg);
+    color: var(--bg);
+    padding: 4px 8px;
+  }
+
+  .zoom-hint {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--fg);
+    color: var(--bg);
+    padding: 4px 8px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .thumb:hover .zoom-hint,
+  .thumb:focus-visible .zoom-hint {
+    opacity: 1;
   }
 
   .body {
@@ -82,6 +152,14 @@ import { projects } from '../data/site';
     flex-direction: column;
     gap: 10px;
     flex: 1;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+
+  .body:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--fg);
   }
 
   h3 {
@@ -96,6 +174,7 @@ import { projects } from '../data/site';
     color: var(--muted);
     margin: 0;
     line-height: 1.5;
+    text-align: left;
   }
 
   .tags {
@@ -112,4 +191,217 @@ import { projects } from '../data/site';
     padding: 2px 8px;
     color: var(--fg);
   }
+
+  .visit-link {
+    font-size: 12px;
+    color: var(--fg);
+    margin-top: 4px;
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    border: none;
+    background: rgba(0, 0, 0, 0.88);
+    cursor: zoom-out;
+    padding: 0;
+  }
+
+  :global(:root[data-theme='light']) .lightbox-backdrop {
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .lightbox-panel {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    border: 3px solid var(--fg);
+    background: var(--card);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 8px 8px 0 var(--fg);
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+  }
+
+  .lightbox-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--fg);
+    padding: 12px 16px;
+    flex-shrink: 0;
+  }
+
+  .lightbox-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .lightbox-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--fg);
+  }
+
+  .lightbox-counter {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .lightbox-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .lightbox-nav,
+  .lightbox-close {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--fg);
+    color: var(--bg);
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .lightbox-nav:hover,
+  .lightbox-close:hover {
+    opacity: 0.85;
+  }
+
+  .lightbox-nav:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .lightbox-frame {
+    overflow: auto;
+    padding: 16px;
+    background: var(--stripe-a);
+    min-width: 0;
+  }
+
+  .lightbox-frame img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: none;
+    border: 3px solid var(--fg);
+    image-rendering: auto;
+  }
 </style>
+
+<script>
+  const lightbox = document.getElementById('project-lightbox')!;
+  const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
+  const lightboxTitle = document.getElementById('lightbox-title')!;
+  const lightboxCounter = document.getElementById('lightbox-counter')!;
+  const prevButton = document.getElementById('lightbox-prev') as HTMLButtonElement;
+  const nextButton = document.getElementById('lightbox-next') as HTMLButtonElement;
+  const backdrop = lightbox.querySelector('.lightbox-backdrop') as HTMLButtonElement;
+  const closeButton = lightbox.querySelector('.lightbox-close') as HTMLButtonElement;
+  const lightboxFrame = lightbox.querySelector('.lightbox-frame') as HTMLDivElement;
+
+  let lastFocus: HTMLElement | null = null;
+  let gallery: string[] = [];
+  let galleryIndex = 0;
+  let galleryTitle = '';
+
+  function renderSlide() {
+    const src = gallery[galleryIndex];
+    lightboxImage.src = src;
+    lightboxImage.alt = `${galleryTitle} screenshot ${galleryIndex + 1}`;
+    lightboxTitle.textContent = galleryTitle;
+
+    const hasMany = gallery.length > 1;
+    lightboxCounter.hidden = !hasMany;
+    lightboxCounter.textContent = `${galleryIndex + 1} / ${gallery.length}`;
+    prevButton.hidden = !hasMany;
+    nextButton.hidden = !hasMany;
+    prevButton.disabled = galleryIndex === 0;
+    nextButton.disabled = galleryIndex === gallery.length - 1;
+    lightboxFrame.scrollTop = 0;
+    lightboxFrame.scrollLeft = 0;
+  }
+
+  function openLightbox(title: string, images: string[], startIndex = 0) {
+    if (!images.length) return;
+
+    lastFocus = document.activeElement as HTMLElement | null;
+    galleryTitle = title;
+    gallery = images;
+    galleryIndex = startIndex;
+    renderSlide();
+
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeButton.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImage.removeAttribute('src');
+    gallery = [];
+    galleryIndex = 0;
+    document.body.style.overflow = '';
+    lastFocus?.focus();
+  }
+
+  function stepGallery(delta: number) {
+    const next = galleryIndex + delta;
+    if (next < 0 || next >= gallery.length) return;
+    galleryIndex = next;
+    renderSlide();
+  }
+
+  document.querySelectorAll('[data-lightbox-images]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const title = trigger.getAttribute('data-lightbox-title');
+      const raw = trigger.getAttribute('data-lightbox-images');
+      if (!title || !raw) return;
+
+      try {
+        const images = JSON.parse(raw) as string[];
+        openLightbox(title, images);
+      } catch {
+        /* ignore malformed data */
+      }
+    });
+  });
+
+  prevButton.addEventListener('click', () => stepGallery(-1));
+  nextButton.addEventListener('click', () => stepGallery(1));
+  backdrop.addEventListener('click', closeLightbox);
+  closeButton.addEventListener('click', closeLightbox);
+
+  document.addEventListener('keydown', (event) => {
+    if (lightbox.hidden) return;
+
+    if (event.key === 'Escape') closeLightbox();
+    if (event.key === 'ArrowLeft') stepGallery(-1);
+    if (event.key === 'ArrowRight') stepGallery(1);
+  });
+</script>
