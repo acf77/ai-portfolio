@@ -73,6 +73,13 @@ export const projects: Project[] = [
     href: 'https://www.linkedin.com/company/elevarsalud',
     images: ['/projects/elevar-salud.png', '/projects/elevar-salud-mobile-en.png'],
   },
+  {
+    title: 'QCALC',
+    desc: 'Quantum computing calculator — enter amplitudes, L2-normalize vectors, encode |ψ⟩ states, compute |ψ|² probabilities, and apply Pauli X gates.',
+    tags: ['QUANTUM', 'CALCULATOR', 'NEXT.JS', 'REACT', 'TYPESCRIPT', 'TAILWIND'],
+    href: 'https://qcalc.vercel.app',
+    images: ['/projects/qcalc.png'],
+  },
 ];
 
 export const papers: Paper[] = [

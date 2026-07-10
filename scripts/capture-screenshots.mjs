@@ -13,6 +13,7 @@ const shots = [
   { name: 'dev-map', urls: ['http://localhost:3456'], wait: 4000 },
   { name: 'provador-virtual', urls: ['http://localhost:3457'], wait: 3000 },
   { name: 'elevar-salud', urls: ['https://elevar-astro-lp.vercel.app'], wait: 3000 },
+  { name: 'qcalc', urls: ['https://qcalc.vercel.app'], wait: 3000 },
 ];
 
 await mkdir(outDir, { recursive: true });
